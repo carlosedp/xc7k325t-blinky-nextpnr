@@ -1,0 +1,49 @@
+CAPI=2:
+name : xc7k325t:test:blinky:1
+
+filesets:
+  rtl:
+    files:
+      - blinky.v : {file_type : verilogSource}
+
+  qmtech_k325t:
+    files:
+      - blinky-qmtech.xdc : {file_type : XDC}
+
+  qmtech_k325t_zyjzgw:
+    files:
+      - blinky-qmtech-zyjzgw.xdc : {file_type : XDC}
+
+  genesys2:
+    files:
+      - blinky-genesys2.xdc : {file_type : XDC}
+
+targets:
+  qmtech_k325t: &qmtech_k325t
+    default_tool : xray
+    description: QMTech Kintex 7 K325T Board using Project X-Ray OSS Toolchain
+    filesets : [rtl, qmtech_k325t]
+    tools:
+      xray:
+        part : xc7k325t
+        package: ffg676-1
+        yosys_synth_options: [-abc9, -flatten]
+        nextpnr_options: [--verbose, --debug]
+    toplevel : blinky
+
+  qmtech_k325t_zyjzgw:
+    << : *qmtech_k325t
+    description: QMTech Kintex 7 K325T ZYJZGW Board using Project X-Ray OSS Toolchain
+    filesets : [rtl, qmtech_k325t_zyjzgw]
+
+  genesys2:
+    default_tool : xray
+    description: Digilent Genesys2 Kintex 7 K325T Board using Project X-Ray OSS Toolchain
+    filesets : [rtl, genesys2]
+    tools:
+      xray:
+        part : xc7k325t
+        package: ffg900-2
+        yosys_synth_options: [-abc9, -flatten]
+        nextpnr_options: [--verbose, --debug]
+    toplevel : blinky
